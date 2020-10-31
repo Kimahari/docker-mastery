@@ -1,0 +1,33 @@
+version: '3.1'
+
+services:
+
+  drupal:
+    image: drupal:8.8.2
+    ports:
+      - "8082:80"
+    volumes:
+      - drupal-modules:/var/www/html/modules
+      - drupal-profiles:/var/www/html/profiles
+      - drupal-sites:/var/www/html/sites
+      - drupal-themes:/var/www/html/themes
+ 
+  postgres:
+    image: postgres:12.1
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgre_password
+    secrets:
+      - postgre_password
+    volumes:
+      - drupal-data:/var/lib/postgresql/data
+
+volumes:
+  drupal-data:
+  drupal-modules:
+  drupal-profiles:
+  drupal-sites:
+  drupal-themes:
+
+secrets:
+    postgre_password:
+        external: true
